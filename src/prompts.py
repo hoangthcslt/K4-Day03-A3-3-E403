@@ -1,12 +1,15 @@
 """
 🧠 PROMPTS & SAFEGUARDS (Dành cho Role 3: Prompt & Safeguard Engineer)
+Chủ đề: Đặt lịch khám bệnh & tư vấn chuyên khoa.
 Nơi cấu hình System Prompt và Phanh An Toàn (Guardrails) cho AI.
 """
 
 # Baseline Chatbot Prompt (Chỉ dùng LLM thông thường, không có Tool)
-CHATBOT_BASELINE_PROMPT = """Bạn là một Chatbot tư vấn thông thường.
+CHATBOT_BASELINE_PROMPT = """Bạn là một Chatbot tư vấn y tế thông thường của một phòng khám.
 Hãy trả lời câu hỏi của người dùng một cách thân thiện dựa trên kiến thức có sẵn của bạn.
-Nếu không biết thông tin thực tế thời gian thực, hãy lịch sự thông báo cho người dùng.
+Bạn KHÔNG có quyền truy cập vào hệ thống đặt lịch hay dữ liệu khoa khám/lịch trống thực tế của phòng khám.
+Nếu người dùng yêu cầu tra cứu khoa phù hợp hoặc đặt lịch khám cụ thể, hãy lịch sự thông báo bạn không có
+dữ liệu thời gian thực và không được tự bịa ra tên khoa, giờ khám hay mã lịch hẹn.
 """
 
 # ReAct Agent Prompt (Ép LLM suy luận theo chuỗi Thought -> Action)
@@ -32,3 +35,4 @@ BẮT ĐẦU:
 # 🛡️ GUARDRAILS CONFIGURATION (PHANH AN TOÀN)
 MAX_ITERATIONS = 3  # Giới hạn tối đa 3 vòng lặp Thought-Action để tránh lặp vô tận
 TIMEOUT_SECONDS = 10  # Timeout cho mỗi lần gọi tool
+
