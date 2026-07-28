@@ -104,7 +104,7 @@ Final Answer:
 Trả lời về tần suất khám sức khỏe định kỳ và giới hạn chức năng của agent.
 ```
 
-**Nhận xét:** Không có Action và Observation vì không cần truy cập dữ liệu thời gian thực. :contentReference[oaicite:0]{index=0}
+**Nhận xét:** Không có Action và Observation vì không cần truy cập dữ liệu thời gian thực.
 
 ---
 
@@ -122,7 +122,7 @@ Final Answer:
 Vâng, cảm cúm là bệnh lây nhiễm...
 ```
 
-**Nhận xét:** Không gọi tool vì đây là câu hỏi kiến thức. :contentReference[oaicite:1]{index=1}
+**Nhận xét:** Không gọi tool vì đây là câu hỏi kiến thức. 
 
 ---
 
@@ -158,8 +158,6 @@ Tôi sẽ thông báo kết quả và hỏi thêm tên bệnh nhân để đặt
 Final Answer:
 Bạn nên khám Khoa Răng Hàm Mặt...
 ```
-
-:contentReference[oaicite:2]{index=2}
 
 ---
 
@@ -211,9 +209,6 @@ Thought:
 Final Answer:
 Thông báo đặt lịch thành công cho người dùng.
 ```
-
-:contentReference[oaicite:3]{index=3} :contentReference[oaicite:4]{index=4}
-
 ---
 
 # 🔴 TEST CASE #5
@@ -230,4 +225,4 @@ Final Answer:
 Xin vui lòng cung cấp lại ngày hợp lệ...
 ```
 
-**Nhận xét:** Agent kết thúc ngay sau bước suy luận, không gọi tool vì đầu vào không hợp lệ. :contentReference[oaicite:5]{index=5}
+**Nhận xét:** Agent kết thúc ngay sau bước suy luận, không gọi tool vì đầu vào không hợp lệ. 
