@@ -98,12 +98,3 @@ Final Answer: Xin lỗi anh Nguyễn Văn A, nhưng tôi không thể đặt l�
 | 5 | 🔴 Edge Case | Từ chối đúng, chỉ ra ngày không hợp lệ | Nhận ra ngày sai ngay ở Thought và trả Final Answer luôn **không gọi tool để xác nhận** — vi phạm nhẹ nguyên tắc "không kết luận khi thiếu Observation", nhưng kết luận vẫn đúng | Factual: 2/2 · Grounding: 1/2 (thiếu Observation làm bằng chứng) · Termination: 2/2 |
 
 **Nhận xét tổng quát**: Ở 2 câu hỏi lý thuyết đơn giản (#1, #2), Chatbot Baseline **nhanh và rẻ hơn** (1 LLM call so với 2-3 lần của Agent) và chất lượng câu trả lời tương đương hoặc tốt hơn — đúng với cảnh báo *"đừng vội kết luận Agent luôn thắng"* trong CODELAB. Ở câu multi-step cần dữ liệu thật (#3, #4), Agent grounded và đáng tin hơn hẳn dù chi phí orchestration cao hơn. Ở Edge Case (#5), cả hai hệ thống đều tránh được hallucination, nhưng Agent lẽ ra nên gọi tool để có Observation làm bằng chứng thay vì tự suy luận ngày sai — điểm cần siết chặt hơn ở prompt V3.
-
----
-
-## 🔀 5. HYBRID DECISION — KHI NÀO DÙNG CHATBOT, KHI NÀO DÙNG AGENT
-
-Xem sơ đồ chi tiết tại [`docs/hybrid_flowchart.mermaid`](./hybrid_flowchart.mermaid).
-
-* **Đi đường Chatbot path** khi: câu hỏi lý thuyết/quy định chung, không cần số liệu thời gian thực (Test Case #1, #2).
-* **Đi đường ReAct Agent path** khi: câu hỏi cần tra cứu khoa/lịch trống thật hoặc thực hiện đặt lịch (Test Case #3, #4, #5).
