@@ -1,0 +1,52 @@
+flowchart TD
+    A([👤 User Question])
+
+    A --> B{Phân loại câu hỏi}
+
+    B -->|🟢 Câu hỏi kiến thức<br/>Không cần dữ liệu thời gian thực| C[🤖 Chatbot Baseline]
+
+    C --> C1[LLM trả lời trực tiếp<br/>Không gọi Tool]
+    C1 --> Z([✅ Final Answer])
+
+    B -->|🟡 Cần tra cứu<br/>hoặc thực hiện hành động| D[🧠 ReAct Agent]
+
+    D --> E[Reasoning<br/>Thought]
+
+    E --> F{Cần Tool?}
+
+    F -->|find_department| G[🔧 find_department]
+    G --> H[Observation]
+
+    H --> I{Cần đặt lịch?}
+
+    I -->|Có| J[🔧 book_appointment]
+    I -->|Không| K[Final Reasoning]
+
+    J --> L[Observation]
+    L --> K
+
+    K --> M([✅ Final Answer])
+
+    %% Guardrails
+    J -. Tool Error .-> N[⚠️ Guardrails]
+    G -. Tool Error .-> N
+
+    N --> O{Repeated Action?<br/>Malformed Args?<br/>Unknown Tool?}
+
+    O -->|Có| P[Safe Fallback / Xin lỗi người dùng]
+    O -->|Không| E
+
+    P --> M
+
+    %% Style
+    classDef chatbot fill:#D6F5D6,stroke:#2E8B57,stroke-width:2px;
+    classDef agent fill:#D9ECFF,stroke:#1565C0,stroke-width:2px;
+    classDef tool fill:#FFF4CC,stroke:#B8860B,stroke-width:2px;
+    classDef guard fill:#FFE0E0,stroke:#C62828,stroke-width:2px;
+    classDef answer fill:#EDE7F6,stroke:#5E35B1,stroke-width:2px;
+
+    class C,C1 chatbot;
+    class D,E,F,H,I,K agent;
+    class G,J tool;
+    class N,O,P guard;
+    class M,Z answer;
