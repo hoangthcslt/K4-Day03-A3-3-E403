@@ -90,7 +90,7 @@ Qua cả 5 test case, Chatbot Baseline **không xuất hiện hiện tượng ha
 
 ---
 
-# 🟢 TEST CASE #1
+## 🟢 TEST CASE #1
 
 **Câu hỏi:** *"Tôi nên khám sức khỏe định kỳ bao lâu một lần?"*
 
@@ -108,7 +108,7 @@ Trả lời về tần suất khám sức khỏe định kỳ và giới hạn c
 
 ---
 
-# 🟢 TEST CASE #2
+## 🟢 TEST CASE #2
 
 **Câu hỏi:** *"Bệnh cảm cúm có lây không?"*
 
@@ -126,7 +126,7 @@ Vâng, cảm cúm là bệnh lây nhiễm...
 
 ---
 
-# 🟡 TEST CASE #3
+## 🟡 TEST CASE #3
 
 **Câu hỏi:** *"Tôi bị đau răng mấy hôm nay, tôi nên khám khoa nào và còn giờ trống không?"*
 
@@ -161,7 +161,7 @@ Bạn nên khám Khoa Răng Hàm Mặt...
 
 ---
 
-# 🟡 TEST CASE #4
+## 🟡 TEST CASE #4
 
 **Câu hỏi:** *"Tôi tên Nguyễn Văn A, bị đau bụng dữ dội. Hãy tìm khoa phù hợp và đặt lịch khám cho tôi vào ngày 30/07/2026."*
 
@@ -211,7 +211,7 @@ Thông báo đặt lịch thành công cho người dùng.
 ```
 ---
 
-# 🔴 TEST CASE #5
+## 🔴 TEST CASE #5
 
 **Câu hỏi:** *"Tôi muốn đặt lịch khám vào ngày 32/07/2026."*
 
