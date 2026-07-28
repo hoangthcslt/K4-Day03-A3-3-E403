@@ -83,3 +83,151 @@
 ## 📌 Nhận xét tổng quát
 
 Qua cả 5 test case, Chatbot Baseline **không xuất hiện hiện tượng hallucination về dữ liệu thời gian thực**. Khi gặp các yêu cầu cần tra cứu lịch khám hoặc đặt lịch, chatbot luôn thừa nhận giới hạn của mình và từ chối cung cấp thông tin mà nó không thể xác minh. Tuy nhiên, chatbot vẫn **suy luận bằng kiến thức y khoa tổng quát** (ví dụ gợi ý khám Răng Hàm Mặt hoặc Nội Tổng quát), nên các câu trả lời này **không có grounding từ hệ thống phòng khám**. Điều này cho thấy Chatbot phù hợp với các câu hỏi kiến thức, nhưng không thể hoàn thành các tác vụ cần dữ liệu thực tế hoặc thao tác trên hệ thống, là điểm mà ReAct Agent có ưu thế hơn.
+
+# 🔄 THOUGHT → ACTION → OBSERVATION TRACE
+
+*Trích xuất từ các trace chạy ReAct Agent.*
+
+---
+
+# 🟢 TEST CASE #1
+
+**Câu hỏi:** *"Tôi nên khám sức khỏe định kỳ bao lâu một lần?"*
+
+```
+Thought:
+Người dùng đang hỏi về tần suất khám sức khỏe định kỳ.
+Các công cụ hiện có chỉ hỗ trợ tìm khoa khám theo triệu chứng và đặt lịch khám.
+Câu hỏi này không yêu cầu sử dụng tool, vì vậy tôi sẽ trả lời dựa trên kiến thức chung.
+
+Final Answer:
+Trả lời về tần suất khám sức khỏe định kỳ và giới hạn chức năng của agent.
+```
+
+**Nhận xét:** Không có Action và Observation vì không cần truy cập dữ liệu thời gian thực. :contentReference[oaicite:0]{index=0}
+
+---
+
+# 🟢 TEST CASE #2
+
+**Câu hỏi:** *"Bệnh cảm cúm có lây không?"*
+
+```
+Thought:
+Người dùng hỏi về thông tin bệnh cảm cúm.
+Các tool hiện có không hỗ trợ trả lời kiến thức y khoa.
+Tôi sẽ trả lời bằng kiến thức phổ thông.
+
+Final Answer:
+Vâng, cảm cúm là bệnh lây nhiễm...
+```
+
+**Nhận xét:** Không gọi tool vì đây là câu hỏi kiến thức. :contentReference[oaicite:1]{index=1}
+
+---
+
+# 🟡 TEST CASE #3
+
+**Câu hỏi:** *"Tôi bị đau răng mấy hôm nay, tôi nên khám khoa nào và còn giờ trống không?"*
+
+```
+Step 1
+
+Thought:
+Người dùng đang hỏi về khoa khám bệnh dựa trên triệu chứng đau răng.
+Tôi cần sử dụng công cụ find_department để tra cứu khoa phù hợp.
+
+Action:
+find_department[đau răng]
+
+Observation:
+Triệu chứng 'đau răng' phù hợp với Khoa Răng Hàm Mặt.
+Khung giờ còn trống hôm nay:
+08:30
+10:00
+15:30
+```
+
+```
+Step 2
+
+Thought:
+Tôi đã biết khoa khám và các khung giờ trống.
+Tôi sẽ thông báo kết quả và hỏi thêm tên bệnh nhân để đặt lịch.
+
+Final Answer:
+Bạn nên khám Khoa Răng Hàm Mặt...
+```
+
+:contentReference[oaicite:2]{index=2}
+
+---
+
+# 🟡 TEST CASE #4
+
+**Câu hỏi:** *"Tôi tên Nguyễn Văn A, bị đau bụng dữ dội. Hãy tìm khoa phù hợp và đặt lịch khám cho tôi vào ngày 30/07/2026."*
+
+```
+Step 1
+
+Thought:
+Tôi cần tìm khoa khám phù hợp với triệu chứng đau bụng dữ dội.
+
+Action:
+find_department[đau bụng dữ dội]
+
+Observation:
+Triệu chứng 'đau bụng dữ dội'
+→ Khoa Tiêu Hóa
+
+Giờ trống:
+07:30
+09:00
+13:30
+```
+
+```
+Step 2
+
+Thought:
+Đã biết khoa phù hợp.
+Tiếp tục đặt lịch khám.
+
+Action:
+book_appointment[Khoa Tiêu Hóa, 30/07/2026, Nguyễn Văn A]
+
+Observation:
+Đặt lịch thành công.
+Mã lịch hẹn:
+APT-3126
+```
+
+```
+Step 3
+
+Thought:
+Đã có đầy đủ thông tin.
+
+Final Answer:
+Thông báo đặt lịch thành công cho người dùng.
+```
+
+:contentReference[oaicite:3]{index=3} :contentReference[oaicite:4]{index=4}
+
+---
+
+# 🔴 TEST CASE #5
+
+**Câu hỏi:** *"Tôi muốn đặt lịch khám vào ngày 32/07/2026."*
+
+```
+Thought:
+Ngày 32/07/2026 không hợp lệ.
+Đồng thời chưa biết triệu chứng hoặc khoa khám.
+Yêu cầu người dùng nhập lại thông tin.
+
+Final Answer:
+Xin vui lòng cung cấp lại ngày hợp lệ...
+```
+
+**Nhận xét:** Agent kết thúc ngay sau bước suy luận, không gọi tool vì đầu vào không hợp lệ. :contentReference[oaicite:5]{index=5}
