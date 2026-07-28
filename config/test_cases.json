@@ -2,31 +2,31 @@
   {
     "id": 1,
     "category": "🟢 Đơn giản (Chỉ cần LLM)",
-    "question": "Thủ đô của Việt Nam là gì?",
-    "expected_behavior": "Chatbot trả lời trực tiếp từ kiến thức có sẵn."
+    "question": "Tôi nên khám sức khỏe định kỳ bao lâu một lần?",
+    "expected_behavior": "Chatbot trả lời trực tiếp từ kiến thức y khoa phổ thông. Agent cũng nên trả lời trực tiếp, không cần gọi tool."
   },
   {
     "id": 2,
     "category": "🟢 Đơn giản (Chỉ cần LLM)",
-    "question": "Nêu 3 lời khuyên để học tốt lập trình.",
-    "expected_behavior": "Chatbot trả lời trực tiếp từ kiến thức có sẵn."
+    "question": "Bệnh cảm cúm có lây không?",
+    "expected_behavior": "Chatbot trả lời trực tiếp từ kiến thức có sẵn. Agent không cần gọi tool và trả lời tương tự Chatbot."
   },
   {
     "id": 3,
-    "category": "🟡 Multi-step (Cần Tool)",
-    "question": "Thời tiết ở Hà Nội hôm nay thế nào và tôi nên mặc gì đi chơi?",
-    "expected_behavior": "Agent gọi tool get_weather('Hà Nội') rồi suy luận trang phục."
+    "category": "🟡 Multi-step (Cần 1 Tool)",
+    "question": "Tôi bị đau răng mấy hôm nay, tôi nên khám khoa nào và còn giờ trống không?",
+    "expected_behavior": "Agent gọi tool find_department('đau răng'), trả về khoa phù hợp và các khung giờ còn trống, sau đó mời người dùng đặt lịch."
   },
   {
     "id": 4,
     "category": "🟡 Multi-step (Cần gọi 2 Tools)",
-    "question": "Kiểm tra vé máy bay từ TP.HCM đi Hà Nội ngày mai và dự báo thời tiết ở Hà Nội.",
-    "expected_behavior": "Agent gọi tool search_flights và get_weather để trả lời đầy đủ."
+    "question": "Tôi tên Nguyễn Văn A, bị đau bụng dữ dội. Hãy tìm khoa phù hợp và đặt lịch khám cho tôi vào ngày 30/07/2026.",
+    "expected_behavior": "Agent gọi find_department để xác định khoa, sau đó gọi book_appointment để đặt lịch. Nếu tham số sai, Agent phải xử lý lỗi và dừng an toàn thay vì lặp vô hạn."
   },
   {
     "id": 5,
     "category": "🔴 Edge Case (Bẫy Guardrail)",
-    "question": "Tra cứu thời tiết ở thành phố Atlantis ngày 32/13/2026.",
-    "expected_behavior": "Tool báo lỗi tham số/thất bại, Guardrail ngắt sau 3 bước và trả về thông báo lịch sự."
+    "question": "Tôi muốn đặt lịch khám vào ngày 32/07/2026.",
+    "expected_behavior": "Agent nhận diện ngày không hợp lệ, không đặt lịch, không hallucinate và trả về thông báo lịch sự mà không lặp gọi tool."
   }
 ]
