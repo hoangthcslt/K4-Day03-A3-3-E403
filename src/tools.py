@@ -55,12 +55,18 @@ def find_department(symptom: str) -> str:
         str: Tên khoa phù hợp kèm khung giờ còn trống, hoặc thông báo lỗi
              nếu không nhận diện được triệu chứng.
     """
-    symptom_lower = symptom.lower().strip()
-    for keyword, department in SYMPTOM_TO_DEPARTMENT.items():
-        if keyword in symptom_lower:
-            slots = DEPARTMENT_SLOTS.get(department, [])
-            return f"Triệu chứng '{symptom}' phù hợp với {department}. Khung giờ còn trống hôm nay: {', '.join(slots)}."
-    return f"LỖI: Không nhận diện được triệu chứng '{symptom}' để gợi ý khoa khám phù hợp."
+    if not isinstance(symptom, str) or not symptom.strip():
+        return f"LỖI: Triệu chứng không hợp lệ: '{symptom}'. Vui lòng cung cấp một chuỗi mô tả triệu chứng."
+
+    try:
+        symptom_lower = symptom.lower().strip()
+        for keyword, department in SYMPTOM_TO_DEPARTMENT.items():
+            if keyword in symptom_lower:
+                slots = DEPARTMENT_SLOTS.get(department, [])
+                return f"Triệu chứng '{symptom}' phù hợp với {department}. Khung giờ còn trống hôm nay: {', '.join(slots)}."
+        return f"LỖI: Không nhận diện được triệu chứng '{symptom}' để gợi ý khoa khám phù hợp."
+    except Exception as e:
+        return f"LỖI: Đã xảy ra lỗi khi tra cứu triệu chứng '{symptom}': {e}"
 
 
 def book_appointment(department: str, date: str, patient_name: str) -> str:
@@ -76,26 +82,39 @@ def book_appointment(department: str, date: str, patient_name: str) -> str:
         str: Xác nhận đặt lịch thành công kèm mã lịch hẹn, hoặc chuỗi báo lỗi
              nếu khoa không tồn tại, ngày sai định dạng/không hợp lệ, hoặc đã hết slot trống.
     """
-    if department not in DEPARTMENT_SLOTS:
+    if not isinstance(department, str) or not department.strip():
         valid = ", ".join(DEPARTMENT_SLOTS.keys())
-        return f"LỖI: Khoa '{department}' không tồn tại trong hệ thống. Các khoa hợp lệ: {valid}."
+        return f"LỖI: Khoa '{department}' không hợp lệ. Các khoa hợp lệ: {valid}."
 
-    if not _DATE_RE.match(date.strip()):
-        return f"LỖI: Ngày '{date}' không đúng định dạng dd/mm/yyyy."
+    if not isinstance(date, str) or not date.strip():
+        return f"LỖI: Ngày '{date}' không hợp lệ. Vui lòng cung cấp ngày dạng chuỗi dd/mm/yyyy."
 
-    day, month, _year = date.strip().split("/")
-    if not (1 <= int(day) <= 31) or not (1 <= int(month) <= 12):
-        return f"LỖI: Ngày '{date}' không hợp lệ (ngày hoặc tháng vượt giới hạn)."
+    if not isinstance(patient_name, str) or not patient_name.strip():
+        return f"LỖI: Tên bệnh nhân '{patient_name}' không hợp lệ."
 
-    date_key = date.strip()
-    already_booked = BOOKED_SLOTS.setdefault((department, date_key), set())
-    slot = next((s for s in DEPARTMENT_SLOTS[department] if s not in already_booked), None)
+    try:
+        if department not in DEPARTMENT_SLOTS:
+            valid = ", ".join(DEPARTMENT_SLOTS.keys())
+            return f"LỖI: Khoa '{department}' không tồn tại trong hệ thống. Các khoa hợp lệ: {valid}."
 
-    if slot is None:
-        return f"LỖI: {department} đã hết giờ khám trống vào ngày {date_key}. Vui lòng chọn ngày khác."
+        if not _DATE_RE.match(date.strip()):
+            return f"LỖI: Ngày '{date}' không đúng định dạng dd/mm/yyyy."
 
-    already_booked.add(slot)
-    return f"Đặt lịch thành công cho bệnh nhân {patient_name} tại {department} vào {date_key} lúc {slot}. Mã lịch hẹn: APT-{abs(hash((department, date_key, patient_name, slot))) % 10000:04d}."
+        day, month, _year = date.strip().split("/")
+        if not (1 <= int(day) <= 31) or not (1 <= int(month) <= 12):
+            return f"LỖI: Ngày '{date}' không hợp lệ (ngày hoặc tháng vượt giới hạn)."
+
+        date_key = date.strip()
+        already_booked = BOOKED_SLOTS.setdefault((department, date_key), set())
+        slot = next((s for s in DEPARTMENT_SLOTS[department] if s not in already_booked), None)
+
+        if slot is None:
+            return f"LỖI: {department} đã hết giờ khám trống vào ngày {date_key}. Vui lòng chọn ngày khác."
+
+        already_booked.add(slot)
+        return f"Đặt lịch thành công cho bệnh nhân {patient_name} tại {department} vào {date_key} lúc {slot}. Mã lịch hẹn: APT-{abs(hash((department, date_key, patient_name, slot))) % 10000:04d}."
+    except Exception as e:
+        return f"LỖI: Đã xảy ra lỗi khi đặt lịch cho '{patient_name}' tại '{department}' ngày '{date}': {e}"
 
 
 # Danh sách các tool được đăng ký để Agent sử dụng
